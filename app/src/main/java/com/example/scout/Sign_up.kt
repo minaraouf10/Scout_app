@@ -5,42 +5,45 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.*
+import com.example.scout.databinding.ActivitySignUpBinding
 import java.lang.String.format
 import java.text.SimpleDateFormat
 import java.util.*
 
-abstract class Sign_up : AppCompatActivity() {
-    val level = arrayOf("Primary one","Primary two","Primary three","Primary four","Primary five","Primary six")
-    private  lateinit var date_ed : EditText
-    private  lateinit   var date_tx : TextView
+ class Sign_up : AppCompatActivity() {
+
+
+    lateinit var binding: ActivitySignUpBinding
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_sign_up)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        val level = arrayOf("Primary one","Primary two","Primary three","Primary four","Primary five","Primary six")
 
-
+        val colors =arrayOf("red","green","black","wight")
         fun spinner_open() {
-            val arrayAdapter =
-                ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item, level)
-            val level_school_spinner: Spinner
-            level_school_spinner = findViewById(R.id.spinner_school)
-            level_school_spinner.adapter = arrayAdapter
-            level_school_spinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-                        Toast.makeText(this@Sign_up, "You select " + level[p2], Toast.LENGTH_LONG)
-                            .show()
-                    }
+            val arrayAdapter =ArrayAdapter(this@Sign_up,android.R.layout.simple_spinner_dropdown_item,colors)
 
-                    override fun onNothingSelected(p0: AdapterView<*>?) {
-                        TODO("Not yet implemented")
-                    }
+
+
+            binding.spinnerSchool.adapter =arrayAdapter
+            binding.spinnerSchool.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+                override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                    Toast.makeText(this@Sign_up,"your select "+colors[p2],Toast.LENGTH_LONG).show()
                 }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
+
+            }
 
         }
 
 
-            date_ed = findViewById(R.id.date_ed)
-            date_tx = findViewById(R.id.date_tx)
+
 
             val canlendar = Calendar.getInstance()
 
@@ -51,7 +54,7 @@ abstract class Sign_up : AppCompatActivity() {
 
                 updateLable(canlendar)
             }
-            date_tx.setOnClickListener {
+            binding.dateEd.setOnClickListener {
                 DatePickerDialog(
                     this,
                     datePicker,
@@ -63,8 +66,8 @@ abstract class Sign_up : AppCompatActivity() {
 
     }
     private fun updateLable(calendar: Calendar){
-        val myformat ="dd-MM-yyyy"
+        val myformat ="dd/MM/yyyy"
         val sdf = SimpleDateFormat(myformat,Locale.UK)
-        date_ed.setText(sdf.format(calendar.time))
+        binding.dateEd.setText(sdf.format(calendar.time))
     }
 }
